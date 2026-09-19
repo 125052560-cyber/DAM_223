@@ -12,13 +12,19 @@ let totalacumulado = 0;
 function agregarPedido(producto, precio) {
   listadepedidos.push({ producto, precio });
   totalacumulado += precio;
-  console.log(`Agregado: ${producto} - $${precio.toFixed(2)}`);
 }
 
 function mostrarMenu() {
   console.log("Menú de Café:");
+
+  console.log(menu);
+
+  agregarPedido(menu[0].producto, menu[0].precio);
+  agregarPedido(menu[3].producto, menu[3].precio);
+
   console.log("Listado de productos registrados:");
   console.log(listadepedidos);
+
   console.log(`Total acumulado: $${totalacumulado.toFixed(2)}`);
   console.log("¡Gracias por su compra!");
 }
