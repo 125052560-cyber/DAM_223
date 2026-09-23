@@ -6,27 +6,42 @@ const menu = [
   { producto: "Café Mocha", precio: 4.00 }
 ];
 
-let listadepedidos = [];
-let totalacumulado = 0;
+let pedidos = [];
 
-function agregarPedido(producto, precio) {
-  listadepedidos.push({ producto, precio });
-  totalacumulado += precio;
+function agregarPedido(indice) {
+  const { producto, precio } = menu[indice];
+  pedidos.push({ producto, precio });
 }
 
 function mostrarMenu() {
   console.log("Menú de Café:");
+  menu.forEach(({ producto, precio }, i) =>
+    console.log(`${i + 1}. ${producto} - $${precio.toFixed(2)}`)
+  );
+}
 
-  console.log(menu);
+function caja() {
+  const subtotal = pedidos.reduce((acum, { precio }) => acum + precio, 0);
+  const iva = subtotal * 0.16;
+  const total = subtotal + iva;
 
-  agregarPedido(menu[0].producto, menu[0].precio);
-  agregarPedido(menu[3].producto, menu[3].precio);
+  console.log("\nTicket de compra:");
+  pedidos.forEach(({ producto, precio }) =>
+    console.log(`- ${producto}: $${precio.toFixed(2)}`)
+  );
 
-  console.log("Listado de productos registrados:");
-  console.log(listadepedidos);
-
-  console.log(`Total acumulado: $${totalacumulado.toFixed(2)}`);
-  console.log("¡Gracias por su compra!");
+  console.log(`\nSubtotal: $${subtotal.toFixed(2)}`);
+  console.log(`IVA (16%): $${iva.toFixed(2)}`);
+  console.log(`Total a pagar: $${total.toFixed(2)}`);
+  console.log("Gracias por su compra");
 }
 
 mostrarMenu();
+
+let opcion = parseInt(prompt("Ingrese el número del café que desea:")) - 1;
+if (opcion >= 0 && opcion < menu.length) {
+  agregarPedido(opcion);
+  caja();
+} else {
+  console.log("Opción inválida");
+}
