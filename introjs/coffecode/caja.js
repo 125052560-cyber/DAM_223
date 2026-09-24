@@ -26,11 +26,7 @@ function mostrarMenu() {
 }
 
 function caja() {
-  let subtotal = 0;
-
-  pedidos.forEach(({ precio }) => {
-    subtotal += precio;
-  });
+  const subtotal = pedidos.reduce((total, { precio }) => total + precio, 0);
 
   const iva = subtotal * 0.16;
   const total = subtotal + iva;
