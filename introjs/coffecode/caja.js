@@ -8,27 +8,38 @@ const menu = [
 
 let pedidos = [];
 
-function agregarPedido(indice) {
+function destructuring(indice) {
   const { producto, precio } = menu[indice];
+
   pedidos.push({ producto, precio });
+
+  console.log(`Elegiste: ${producto}`);
+  console.log(`Precio: $${precio.toFixed(2)}`);
 }
 
 function mostrarMenu() {
   console.log("Menú de Café:");
-  menu.forEach(({ producto, precio }, i) =>
-    console.log(`${i + 1}. ${producto} - $${precio.toFixed(2)}`)
-  );
+
+  menu.forEach(({ producto, precio }, i) => {
+    console.log(`${i + 1}. ${producto} - $${precio.toFixed(2)}`);
+  });
 }
 
 function caja() {
-  const subtotal = pedidos.reduce((acum, { precio }) => acum + precio, 0);
+  let subtotal = 0;
+
+  pedidos.forEach(({ precio }) => {
+    subtotal += precio;
+  });
+
   const iva = subtotal * 0.16;
   const total = subtotal + iva;
 
   console.log("\nTicket de compra:");
-  pedidos.forEach(({ producto, precio }) =>
-    console.log(`- ${producto}: $${precio.toFixed(2)}`)
-  );
+
+  pedidos.forEach(({ producto, precio }) => {
+    console.log(`- ${producto}: $${precio.toFixed(2)}`);
+  });
 
   console.log(`\nSubtotal: $${subtotal.toFixed(2)}`);
   console.log(`IVA (16%): $${iva.toFixed(2)}`);
@@ -39,8 +50,9 @@ function caja() {
 mostrarMenu();
 
 let opcion = parseInt(prompt("Ingrese el número del café que desea:")) - 1;
+
 if (opcion >= 0 && opcion < menu.length) {
-  agregarPedido(opcion);
+  destructuring(opcion);
   caja();
 } else {
   console.log("Opción inválida");
