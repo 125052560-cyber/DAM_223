@@ -8,48 +8,46 @@ const menu = [
 
 let pedidos = [];
 
-function destructuring(indice) {
+function destructuring(indice, callback) {
   const { producto, precio } = menu[indice];
 
-  pedidos.push({ producto, precio });
+  pedidos.push({ producto, precio, cantidad });
 
-  console.log(`Elegiste: ${producto}`);
-  console.log(`Precio: $${precio.toFixed(2)}`);
+  alert(`Elegiste: ${producto}\nPrecio: $${precio.toFixed(2)}`);
+
+  callback();
 }
 
-function mostrarMenu() {
-  console.log("Menú de Café:");
+function mostrarMenu(callback) {
+  const opciones = menu
+    .map(({ producto, precio }, i) => `${i + 1}. ${producto} - $${precio.toFixed(2)}`)
+    .join("\n");
 
-  menu.forEach(({ producto, precio }, i) => {
-    console.log(`${i + 1}. ${producto} - $${precio.toFixed(2)}`);
-  });
+  alert(`Menú de Café:\n${opciones}`);
+
+  callback();
 }
 
 function caja() {
-  const subtotal = pedidos.reduce((total, { precio }) => total + precio, 0);
+  const subtotal = pedidos.reduce((total, { precio, cantidad }) => total + (precio * cantidad), 0);
 
   const iva = subtotal * 0.16;
   const total = subtotal + iva;
 
-  console.log("\nTicket de compra:");
+  const productos = pedidos
+    .map(({ producto, precio, cantidad }) => `- ${producto}: $${precio.toFixed(2)} (Cantidad: ${cantidad})`)
+    .join("\n");
 
-  pedidos.forEach(({ producto, precio }) => {
-    console.log(`- ${producto}: $${precio.toFixed(2)}`);
-  });
-
-  console.log(`\nSubtotal: $${subtotal.toFixed(2)}`);
-  console.log(`IVA (16%): $${iva.toFixed(2)}`);
-  console.log(`Total a pagar: $${total.toFixed(2)}`);
-  console.log("Gracias por su compra");
+  alert(`Ticket de compra:\n\n${productos}\n\nSubtotal: $${subtotal.toFixed(2)}\nIVA (16%): $${iva.toFixed(2)}\nTotal a pagar: $${total.toFixed(2)}\nGracias por su compra\nNotificación: Pedido listo`);
 }
 
-mostrarMenu();
+mostrarMenu(() => {
+  const opcion = parseInt(prompt("Ingrese el número del café que desea:"), 10) - 1;
+  const cantidad = parseInt(prompt("Ingrese la cantidad que desea:"), 10);
 
-let opcion = parseInt(prompt("Ingrese el número del café que desea:")) - 1;
-
-if (opcion >= 0 && opcion < menu.length) {
-  destructuring(opcion);
-  caja();
-} else {
-  console.log("Opción inválida");
-}
+  if (opcion >= 0 && opcion < menu.length) {
+    destructuring(opcion, () => caja());
+  } else {
+    alert("Opción inválida\nNotificación: Pedido cancelado");
+  }
+});
